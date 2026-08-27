@@ -22,6 +22,77 @@
         header h1 {
             margin: 0 0 0.5rem 0;
         }
+        .banner {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            overflow: hidden;
+            background-color: #1e3d1a;
+        }
+        .banner-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .banner-slide {
+            min-width: 100%;
+            aspect-ratio: 3 / 1;
+            object-fit: cover;
+            display: block;
+        }
+        .banner-control {
+            position: absolute;
+            top: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 0;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            transform: translateY(-50%);
+        }
+        .banner-control:hover,
+        .banner-control:focus-visible {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .banner-control:focus-visible,
+        .banner-dot:focus-visible {
+            outline: 3px solid #ffc107;
+            outline-offset: 3px;
+        }
+        .banner-control.previous {
+            left: 1rem;
+        }
+        .banner-control.next {
+            right: 1rem;
+        }
+        .banner-dots {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            display: flex;
+            gap: 0.5rem;
+            transform: translateX(-50%);
+        }
+        .banner-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            padding: 0;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        .banner-dot.active {
+            background-color: #fff;
+        }
+        @media (max-width: 600px) {
+            .banner-slide {
+                aspect-ratio: 2 / 1;
+            }
+        }
         .container {
             max-width: 900px;
             margin: 2rem auto;
@@ -78,6 +149,35 @@
         <h1>Stoke Poges Campsite</h1>
         <p>Simple wild camping break in Buckinghamshire</p>
     </header>
+
+    <section class="banner" aria-label="Campsite photos">
+        <div class="banner-slides">
+            <img class="banner-slide" src="images/slide-01.jpg" alt="View of Stoke Poges Campsite">
+            <img class="banner-slide" src="images/slide-02.jpg" alt="Campsite woodland">
+            <img class="banner-slide" src="images/slide-03.jpg" alt="Open camping field">
+            <img class="banner-slide" src="images/slide-04.jpg" alt="Tent pitch at the campsite">
+            <img class="banner-slide" src="images/slide-05.jpg" alt="Relaxing outdoors at the campsite">
+            <img class="banner-slide" src="images/slide-06.jpg" alt="Campfire area">
+            <img class="banner-slide" src="images/slide-07.jpg" alt="Campsite surroundings">
+            <img class="banner-slide" src="images/slide-08.jpg" alt="Walking route near the campsite">
+            <img class="banner-slide" src="images/slide-09.jpg" alt="Nature near Stoke Poges">
+            <img class="banner-slide" src="images/slide-10.jpg" alt="Peaceful campsite view">
+        </div>
+        <button class="banner-control previous" type="button" aria-label="Previous image">&#10094;</button>
+        <button class="banner-control next" type="button" aria-label="Next image">&#10095;</button>
+        <div class="banner-dots" aria-label="Choose a campsite image">
+            <button class="banner-dot active" type="button" aria-label="Show image 1"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 2"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 3"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 4"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 5"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 6"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 7"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 8"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 9"></button>
+            <button class="banner-dot" type="button" aria-label="Show image 10"></button>
+        </div>
+    </section>
 
     <div class="container">
 
@@ -136,7 +236,37 @@
 
     <footer>
         <p>&copy; Stoke Poges Campsite. All rights reserved.</p>
+        <p><a href="https://www.facebook.com/p/Stoke-Poges-Wild-Camping-61574961423258/" target="_blank" rel="noopener noreferrer" style="color: #fff;">Follow us on Facebook</a></p>
     </footer>
+
+    <script>
+        const bannerSlides = document.querySelector('.banner-slides');
+        const bannerImages = document.querySelectorAll('.banner-slide');
+        const bannerDots = document.querySelectorAll('.banner-dot');
+        let currentBannerImage = 0;
+
+        function showBannerImage(index) {
+            currentBannerImage = (index + bannerImages.length) % bannerImages.length;
+            bannerSlides.style.transform = `translateX(-${currentBannerImage * 100}%)`;
+            bannerDots.forEach((dot, dotIndex) => {
+                dot.classList.toggle('active', dotIndex === currentBannerImage);
+            });
+        }
+
+        document.querySelector('.banner-control.previous').addEventListener('click', () => {
+            showBannerImage(currentBannerImage - 1);
+        });
+
+        document.querySelector('.banner-control.next').addEventListener('click', () => {
+            showBannerImage(currentBannerImage + 1);
+        });
+
+        bannerDots.forEach((dot, dotIndex) => {
+            dot.addEventListener('click', () => showBannerImage(dotIndex));
+        });
+
+        setInterval(() => showBannerImage(currentBannerImage + 1), 5000);
+    </script>
 
 </body>
 </html>
